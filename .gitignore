@@ -1,0 +1,10 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Sensible Files
+.env
+
+# System Files
+.DS_Store
+Thumbs.db
