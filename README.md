@@ -1,0 +1,2 @@
+# My API Hub 🌐
+Personal API Proxy is a lightweight Node.js backend designed to manage and protect API keys used in personal projects. It acts as a secure intermediary, preventing the exposure of sensitive credentials on the frontend.
