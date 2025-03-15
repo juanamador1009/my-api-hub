@@ -1,7 +1,9 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 
+dotenv.config();
 const app = express();
 app.use(cors());
 
@@ -10,9 +12,28 @@ app.get("/", (req, res) => {
   res.json({ message: "nothing here to see" });
 });
 
-// Open Weather Map API Key
-app.get("/open-weather/key", (req, res) => {
-  res.json({ apiKey: process.env.WEATHER_API_KEY });
+// Open Weather Map API Request - GET Weather by City Name
+app.get("/weather", async (req, res) => {
+  try {
+    const city = req.query.city;
+    if (!city) {
+      return res.status(400).json({ error: "A city name is required" });
+    }
+
+    const apiKey = process.env.WEATHER_API_KEY;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${city}&appid=${apiKey}`;
+
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.cod === "400" || data.cod === "404") {
+      return res.status(400).json({ error: `Invalid city` });
+    }
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Could not get weather" });
+  }
 });
 
 // Middleware to handle undefined routes
